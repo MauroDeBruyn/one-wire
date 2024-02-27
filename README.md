@@ -1,4 +1,4 @@
 # one-wire
 
 ## ToDo
-- Schematics in Altiul Designer 360
+- Schematics in Altium Designer 360
