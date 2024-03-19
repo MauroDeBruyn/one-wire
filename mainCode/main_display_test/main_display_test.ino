@@ -26,23 +26,26 @@ char daysOfTheWeek[7][12] = {
 
 void timeStamp(void){
   DateTime now = rtc.now();
-  Serial.print("Date & Time: \n");
-  Serial.print(now.day(), DEC);
-  Serial.print('/');
-  Serial.print(now.month(), DEC);
-  Serial.print('/');
-  Serial.print(now.year(), DEC);
-  Serial.print(" (");
-  Serial.print(daysOfTheWeek[now.dayOfTheWeek()]);
-  Serial.print(") ");
-  Serial.print(now.hour(), DEC);
-  Serial.print(':');
-  Serial.print(now.minute(), DEC);
-  Serial.print(':');
-  Serial.println(now.second(), DEC);
+  TFTscreen.text("Date & Time: \n", 0, 0);
+  TFTscreen.text(String(now.day(), DEC).c_str(), 0, 10);
+  TFTscreen.text("/", 0, 10);
+  TFTscreen.text(String(now.month(), DEC).c_str(), 0, 10);
+  TFTscreen.text("/", 0, 10);
+  TFTscreen.text(String(now.year(), DEC).c_str(), 0, 10);
+  TFTscreen.text(" (", 0, 10);
+  TFTscreen.text(daysOfTheWeek[now.dayOfTheWeek()], 0, 10);
+  TFTscreen.text(") ", 0, 10);
+  TFTscreen.text(String(now.hour(), DEC).c_str(), 0, 10);
+  TFTscreen.text(":", 0, 10);
+  TFTscreen.text(String(now.minute(), DEC).c_str(), 0, 10);
+  TFTscreen.text(":", 0, 10);
+  TFTscreen.text(String(now.second(), DEC).c_str(), 0, 10);
 
-  delay(1000); // delay 1 seconds
+  delay(1000); // delay 1 second
 }
+
+
+
 
 void logIButton(void) {
   byte i;
