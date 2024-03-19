@@ -1,8 +1,3 @@
-/*
- * Rui Santos 
- * Complete Project Details https://randomnerdtutorials.com
- */
-
 // include TFT and SPI libraries
 #include <TFT.h>  
 #include <SPI.h>
@@ -24,22 +19,13 @@ void setup() {
   // clear the screen with a black background
   TFTscreen.background(0, 0, 0);
   //set the text size
-  TFTscreen.setTextSize(2);
+  TFTscreen.setTextSize(1);
 }
 
 void loop() {
-
-  //generate a random color
-  int redRandom = random(0, 255);
-  int greenRandom = random (0, 255);
-  int blueRandom = random (0, 255);
-  
-  // set a random font color
-  TFTscreen.stroke(redRandom, greenRandom, blueRandom);
+  // set font color
+  TFTscreen.stroke(255, 255, 255);
   
   // print Hello, World! in the middle of the screen
-  TFTscreen.text("Hello, World!", 6, 57);
-  
-  // wait 200 miliseconds until change to next color
-  delay(200);
+  TFTscreen.text(" Onewire \n Timestamp", 0, 6);
 }
