@@ -26,23 +26,23 @@ char daysOfTheWeek[7][12] = {
 
 void timeStamp(void){
   DateTime now = rtc.now();
+  // Write date and time information
   TFTscreen.text("Date & Time: \n", 0, 0);
-  TFTscreen.text(String(now.day(), DEC).c_str(), 0, 10);
-  TFTscreen.text("/", 0, 10);
-  TFTscreen.text(String(now.month(), DEC).c_str(), 0, 10);
-  TFTscreen.text("/", 0, 10);
-  TFTscreen.text(String(now.year(), DEC).c_str(), 0, 10);
-  TFTscreen.text(" (", 0, 10);
-  TFTscreen.text(daysOfTheWeek[now.dayOfTheWeek()], 0, 10);
-  TFTscreen.text(") ", 0, 10);
-  TFTscreen.text(String(now.hour(), DEC).c_str(), 0, 10);
-  TFTscreen.text(":", 0, 10);
-  TFTscreen.text(String(now.minute(), DEC).c_str(), 0, 10);
-  TFTscreen.text(":", 0, 10);
-  TFTscreen.text(String(now.second(), DEC).c_str(), 0, 10);
+  TFTscreen.text(String(now.day(), DEC).c_str(), 0, 20);
+  TFTscreen.text("/", 23, 20);
+  TFTscreen.text(String(now.month(), DEC).c_str(), 37, 20);
+  TFTscreen.text("/", 50, 20);
+  TFTscreen.text(String(now.year(), DEC).c_str(), 60, 20);
+  TFTscreen.text(daysOfTheWeek[now.dayOfTheWeek()], 0, 40);
+  TFTscreen.text(String(now.hour(), DEC).c_str(), 0, 60);
+  TFTscreen.text(":", 23, 60);
+  TFTscreen.text(String(now.minute(), DEC).c_str(), 35, 60);
+  TFTscreen.text(":", 57, 60);
+  TFTscreen.text(String(now.second(), DEC).c_str(), 67, 60);
 
   delay(1000); // delay 1 second
 }
+
 
 
 
@@ -57,8 +57,6 @@ void logIButton(void) {
     Serial.print("\n\n\n");
 
     Serial.print("\n\Address:\n\r");
-
-    analogWrite(8, 255); //Led on
 
     for( i = 0; i < 8; i++) {
       if (addr[i] < 16) {
@@ -82,7 +80,7 @@ void logIButton(void) {
         return;
     }
     delay(1000); //scan time incraments
-    analogWrite(8, 0); //Led off
+
   }
   ds.reset_search();
   return;
@@ -106,20 +104,20 @@ void setup() {
   // January 21, 2021 at 3am you would call:
   // rtc.adjust(DateTime(2021, 1, 21, 3, 0, 0));
 
-  //IButtonRead
-
-  pinMode(8, OUTPUT); // Set the LED pin as an output
-
    //initialize the library
   TFTscreen.begin();
 
   // clear the screen with a black background
   TFTscreen.background(0, 0, 0);
   //set the text size
-  TFTscreen.setTextSize(1);
+  TFTscreen.setTextSize(2);
 }
 
 void loop() {
+    // Clear the screen before writing new content
+  TFTscreen.background(0, 0, 0);
+
+
   //Serial.print("Present I-Button...\n\r");
   logIButton();
 
