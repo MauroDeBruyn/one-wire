@@ -9,8 +9,8 @@
 #define rst  8
 
 OneWire  ds(5);  // Connect 1-wire sensor to pin 5
-
 TFT TFTscreen = TFT(cs, dc, rst); // create an instance of the library
+const int MOTION_PIN = 7; // Pin connected to motion detector
 
 RTC_DS1307 rtc;
 
@@ -28,17 +28,17 @@ void timeStamp(void){
   DateTime now = rtc.now();
   // Write date and time information
   TFTscreen.text("Date & Time: \n", 0, 0);
-  TFTscreen.text(String(now.day(), DEC).c_str(), 0, 20);
-  TFTscreen.text("/", 23, 20);
-  TFTscreen.text(String(now.month(), DEC).c_str(), 37, 20);
-  TFTscreen.text("/", 50, 20);
-  TFTscreen.text(String(now.year(), DEC).c_str(), 60, 20);
-  TFTscreen.text(daysOfTheWeek[now.dayOfTheWeek()], 0, 40);
-  TFTscreen.text(String(now.hour(), DEC).c_str(), 0, 60);
-  TFTscreen.text(":", 23, 60);
-  TFTscreen.text(String(now.minute(), DEC).c_str(), 35, 60);
-  TFTscreen.text(":", 57, 60);
-  TFTscreen.text(String(now.second(), DEC).c_str(), 67, 60);
+  TFTscreen.text(String(now.day(), DEC).c_str(), 0, 10);
+  TFTscreen.text("/", 23, 10);
+  TFTscreen.text(String(now.month(), DEC).c_str(), 37, 10);
+  TFTscreen.text("/", 50, 10);
+  TFTscreen.text(String(now.year(), DEC).c_str(), 60, 10);
+  TFTscreen.text(daysOfTheWeek[now.dayOfTheWeek()], 0, 20);
+  TFTscreen.text(String(now.hour(), DEC).c_str(), 0, 30);
+  TFTscreen.text(":", 23, 30);
+  TFTscreen.text(String(now.minute(), DEC).c_str(), 35, 30);
+  TFTscreen.text(":", 57, 30);
+  TFTscreen.text(String(now.second(), DEC).c_str(), 67, 30);
 
   delay(1000); // delay 1 second
 }
@@ -48,37 +48,45 @@ void timeStamp(void){
 
 
 void logIButton(void) {
-  byte i;
+   byte i;
   byte present = 0;
   byte data[12];
   byte addr[8];
 
-  while(ds.search(addr)) {
+  while (ds.search(addr)) {
     Serial.print("\n\n\n");
-
     Serial.print("\n\Address:\n\r");
 
-    for( i = 0; i < 8; i++) {
+    // Clear the screen before writing new content
+    TFTscreen.background(0, 0, 0);
+
+    TFTscreen.setCursor(0, 50);
+    TFTscreen.print("Address: ");
+    TFTscreen.setCursor(0, 60);
+
+    for (i = 0; i < 8; i++) {
       if (addr[i] < 16) {
         Serial.print('0');
+        TFTscreen.print('0');
       }
+      TFTscreen.print(addr[i], HEX);
       Serial.print(addr[i], HEX);
 
       if (i < 7) {
         Serial.print(" ");
+        TFTscreen.print(" ");
       }
     }
+    TFTscreen.setCursor(0, 100);
     Serial.print("\n\n");
-
     timeStamp();
-    
-    //Serial.print("\n\n\n");
 
-    if ( OneWire::crc8( addr, 7) != addr[7]) {
-        Serial.print("CRC is not valid!\n");
-
-        return;
+    if (OneWire::crc8(addr, 7) != addr[7]) {
+      TFTscreen.setCursor(0, 70);
+      TFTscreen.print("CRC is not valid!");
+      return;
     }
+
     delay(1000); //scan time incraments
 
   }
@@ -88,6 +96,8 @@ void logIButton(void) {
 
 void setup() {
   Serial.begin(9600);
+
+  pinMode(MOTION_PIN, INPUT_PULLUP);
 
   //TimeStamp
   // SETUP RTC MODULE
@@ -110,14 +120,10 @@ void setup() {
   // clear the screen with a black background
   TFTscreen.background(0, 0, 0);
   //set the text size
-  TFTscreen.setTextSize(2);
+  TFTscreen.setTextSize(1);
 }
 
 void loop() {
-    // Clear the screen before writing new content
-  TFTscreen.background(0, 0, 0);
-
-
   //Serial.print("Present I-Button...\n\r");
   logIButton();
 
@@ -127,5 +133,19 @@ void loop() {
   // print Hello, World! in the middle of the screen
   //TFTscreen.text(" Onewire \n Timestamp", 0, 6);
 
+  int proximity = digitalRead(MOTION_PIN);
+
+    if (proximity == LOW) // If the sensor's output goes low, motion is detected
+  {
+    Serial.println("Motion detected!");
+    TFTscreen.setCursor(0, 110);
+    TFTscreen.print("Motion detected!");
+  }
+  else
+  {
+    TFTscreen.fill(0,0,0);
+    TFTscreen.rect(-1, 100, 240, 50);
+    //TFTscreen.rect(0, 110, 240, 10, TFTscreen.Color565(0, 0, 0)); // Clear the area where the sentence was printed
+  }
 
 }
