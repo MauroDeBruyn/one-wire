@@ -30,6 +30,15 @@ void setup() {
   Serial.println("Hz");
 }
 
+struct SensorData {
+  float temperature;
+  float humidity;
+  float x;
+  float y;
+  float z;
+};
+
+
 void loop() {
 
 
@@ -63,6 +72,7 @@ void loop() {
 
   delay(1000);
 
+float waardeIMU = IMU.readAcceleration(x, y, z);
   if (IMU.accelerationAvailable()) {
     IMU.readAcceleration(x, y, z);
 
@@ -100,18 +110,21 @@ void loop() {
     // Send the fixed number over I2C
   Wire.beginTransmission(8); // Address of the Arduino Uno
   Wire.write((uint8_t*)&temperature, sizeof(temperature));
+  delay(1000);
   Wire.write((uint8_t*)&humidity, sizeof(humidity));
+  delay(1000);
   Wire.write((uint8_t*)&x, sizeof(x));
+  delay(1000);
   Wire.write((uint8_t*)&y, sizeof(y));
+  delay(1000);
   Wire.write((uint8_t*)&z, sizeof(z));
-  Wire.write((uint8_t*)&degreesX, sizeof(degreesX));
+  delay(1000);
 
-  
   Wire.endTransmission();
 
   Serial.println(temperature);
   Serial.println(humidity);
-  Serial.println(degreesX);
+  Serial.println(waardeIMU);
 
 
 }

@@ -24,6 +24,8 @@ char daysOfTheWeek[7][12] = {
   "Saturday"
 };
 
+float sensorData = 0.0;
+
 void timeStamp(void){
   DateTime now = rtc.now();
   // Write date and time information
@@ -43,9 +45,13 @@ void timeStamp(void){
   delay(1000); // delay 1 second
 }
 
-
-
-
+// Function to handle received data
+void receiveEvent(int bytes) {
+  while (Wire.available()) { // While data is available to receive
+    Wire.readBytes((uint8_t*)&sensorData, sizeof(sensorData)); // Read the incoming sensor data
+    Serial.println(sensorData);
+  }
+}
 
 void logIButton(void) {
    byte i;
@@ -80,6 +86,7 @@ void logIButton(void) {
     TFTscreen.setCursor(0, 100);
     Serial.print("\n\n");
     timeStamp();
+    receiveEvent(2);
 
     if (OneWire::crc8(addr, 7) != addr[7]) {
       TFTscreen.setCursor(0, 70);
@@ -121,6 +128,10 @@ void setup() {
   TFTscreen.background(0, 0, 0);
   //set the text size
   TFTscreen.setTextSize(1);
+
+  //Sensor read
+  Wire.begin(8);                // Join I2C bus with address 8
+  Wire.onReceive(receiveEvent); // Register event
 }
 
 void loop() {
@@ -147,5 +158,6 @@ void loop() {
     TFTscreen.rect(-1, 100, 240, 50);
     //TFTscreen.rect(0, 110, 240, 10, TFTscreen.Color565(0, 0, 0)); // Clear the area where the sentence was printed
   }
+
 
 }
