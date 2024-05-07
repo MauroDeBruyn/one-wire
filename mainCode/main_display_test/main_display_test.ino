@@ -45,11 +45,87 @@ void timeStamp(void){
   delay(1000); // delay 1 second
 }
 
+int getal = 0;
+int temp = 0;
+int hum = 0;
+int x = 0;
+int y = 0;
+int z = 0;
+
+bool temperatuurbool = false;
+bool humiditybool = false;
+bool xbool = false;
+bool ybool = false;
+bool zbool = false;
+
+
 // Function to handle received data
-void receiveEvent(int bytes) {
+void receiveEvent(int bytes,bool een,bool twee,bool drie,bool vier,bool vijf) {
   while (Wire.available()) { // While data is available to receive
     Wire.readBytes((uint8_t*)&sensorData, sizeof(sensorData)); // Read the incoming sensor data
-    Serial.println(sensorData);
+
+    getal += 1;
+
+    //Serial.println(sensorData);
+    //Serial.println(getal);
+    Serial.println(getal);
+
+    switch(getal) {
+      case 1:
+        temp = sensorData;
+        Serial.print("Temp: ");
+        Serial.println(temp);
+
+        TFTscreen.setCursor(0, 75);
+        //TFTscreen.print("Temp: 27");
+        temperatuurbool = true;
+        //print(temperatuurbool);
+        
+
+        break;
+
+      case 2:
+        hum = sensorData;
+        Serial.print("Hum: ");
+        Serial.println(hum);
+
+        humiditybool = true;
+
+        break;
+
+      case 3:
+        x = sensorData;
+        Serial.print("X: ");
+        Serial.println(x);
+
+        xbool = true;
+
+        break;
+
+      case 4:
+        y = sensorData;
+        Serial.print("Y: ");
+        Serial.println(y);
+
+        ybool= true;
+
+        break;
+
+      case 5:
+        z = sensorData;
+        Serial.print("Z: ");
+        Serial.println(z);
+        getal = 0;
+
+        zbool = true;
+        
+        break;
+
+      default:
+        // Handle unexpected counter value
+        Serial.println("Error: Unexpected counter value.");
+        break;
+    }
   }
 }
 
@@ -64,7 +140,8 @@ void logIButton(void) {
     Serial.print("\n\Address:\n\r");
 
     // Clear the screen before writing new content
-    TFTscreen.background(0, 0, 0);
+    TFTscreen.fill(0,0,0);
+    TFTscreen.rect(-1, -1, 240, 70);
 
     TFTscreen.setCursor(0, 50);
     TFTscreen.print("Address: ");
@@ -86,7 +163,53 @@ void logIButton(void) {
     TFTscreen.setCursor(0, 100);
     Serial.print("\n\n");
     timeStamp();
-    receiveEvent(2);
+    receiveEvent(10,temperatuurbool,humiditybool,xbool,ybool,zbool);
+    //print(temperatuurbool)
+    if(temperatuurbool == true)
+    {
+          TFTscreen.setCursor(0, 74);
+
+TFTscreen.print("Temp: ");
+TFTscreen.print(temp);
+//temperatuurbool.clear();
+temperatuurbool = false;
+    }
+
+    if(humiditybool == true)
+    {
+      TFTscreen.setCursor(80, 74);
+TFTscreen.print("Hum: ");
+TFTscreen.print(hum);
+//temperatuurbool.clear();
+humiditybool = false;
+    }
+
+    if(xbool == true)
+    {
+      TFTscreen.setCursor(0, 90);
+TFTscreen.print("x: ");
+TFTscreen.print(x);
+//temperatuurbool.clear();
+xbool = false;
+    }
+
+    if(ybool == true)
+    {
+      TFTscreen.setCursor(50, 90);
+TFTscreen.print("y: ");
+TFTscreen.print(y);
+//temperatuurbool.clear();
+ybool = false;
+    }
+
+    if(zbool == true)
+    {
+      TFTscreen.setCursor(100, 90);
+TFTscreen.print("z: ");
+TFTscreen.print(z);
+//temperatuurbool.clear();
+zbool = false;
+    }
 
     if (OneWire::crc8(addr, 7) != addr[7]) {
       TFTscreen.setCursor(0, 70);
