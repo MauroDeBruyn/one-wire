@@ -76,7 +76,7 @@ void receiveEvent(int bytes,bool een,bool twee,bool drie,bool vier,bool vijf) {
         Serial.print("Temp: ");
         Serial.println(temp);
 
-        TFTscreen.setCursor(0, 75);
+        //TFTscreen.setCursor(0, 75);
         //TFTscreen.print("Temp: 27");
         temperatuurbool = true;
         //print(temperatuurbool);
@@ -167,48 +167,48 @@ void logIButton(void) {
     //print(temperatuurbool)
     if(temperatuurbool == true)
     {
-          TFTscreen.setCursor(0, 74);
+      TFTscreen.setCursor(0, 74);
 
-TFTscreen.print("Temp: ");
-TFTscreen.print(temp);
-//temperatuurbool.clear();
-temperatuurbool = false;
+      TFTscreen.print("Temp: ");
+      TFTscreen.print(temp);
+      //temperatuurbool.clear();
+      temperatuurbool = false;
     }
 
     if(humiditybool == true)
     {
       TFTscreen.setCursor(80, 74);
-TFTscreen.print("Hum: ");
-TFTscreen.print(hum);
-//temperatuurbool.clear();
-humiditybool = false;
+      TFTscreen.print("Hum: ");
+      TFTscreen.print(hum);
+      //temperatuurbool.clear();
+      humiditybool = false;
     }
 
     if(xbool == true)
     {
       TFTscreen.setCursor(0, 90);
-TFTscreen.print("x: ");
-TFTscreen.print(x);
-//temperatuurbool.clear();
-xbool = false;
+      TFTscreen.print("x: ");
+      TFTscreen.print(x);
+      //temperatuurbool.clear();
+      xbool = false;
     }
 
     if(ybool == true)
     {
       TFTscreen.setCursor(50, 90);
-TFTscreen.print("y: ");
-TFTscreen.print(y);
-//temperatuurbool.clear();
-ybool = false;
+      TFTscreen.print("y: ");
+      TFTscreen.print(y);
+      //temperatuurbool.clear();
+      ybool = false;
     }
 
     if(zbool == true)
     {
       TFTscreen.setCursor(100, 90);
-TFTscreen.print("z: ");
-TFTscreen.print(z);
-//temperatuurbool.clear();
-zbool = false;
+      TFTscreen.print("z: ");
+      TFTscreen.print(z);
+      //temperatuurbool.clear();
+      zbool = false;
     }
 
     if (OneWire::crc8(addr, 7) != addr[7]) {

@@ -1,7 +1,7 @@
 # one-wire
 
 ## ToDo
-- Schematics in Altium Designer 360
+- Schematics in Altium Designer 360 (Add arduino nano)
 
 ## Weblinks
   [a link](https://www.instructables.com/The-iButton-garage-door-opener-Arduino/)
