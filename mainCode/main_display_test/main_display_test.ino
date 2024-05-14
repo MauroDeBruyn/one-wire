@@ -129,11 +129,89 @@ void receiveEvent(int bytes,bool een,bool twee,bool drie,bool vier,bool vijf) {
   }
 }
 
+void updateSensorValues(void){
+  TFTscreen.noStroke();
+  receiveEvent(10,temperatuurbool,humiditybool,xbool,ybool,zbool);
+    //print(temperatuurbool)
+    if(temperatuurbool == true)
+    {
+      //Clear section
+      TFTscreen.fill(0,0,0);
+      TFTscreen.rect(30, 71, 35, 15);
+
+      TFTscreen.setCursor(0, 74);
+
+      TFTscreen.print("Temp: ");
+      TFTscreen.print(temp);
+      //temperatuurbool.clear();
+      temperatuurbool = false;
+    }
+
+    if(humiditybool == true)
+    {
+      //Clear section
+      TFTscreen.fill(0,0,0);
+      TFTscreen.rect(110, 71, 35, 15);
+
+      TFTscreen.setCursor(80, 74);
+
+      TFTscreen.print("Hum: ");
+      TFTscreen.print(hum);
+      //temperatuurbool.clear();
+      humiditybool = false;
+    }
+
+    if(xbool == true)
+    {
+      //Clear section
+      TFTscreen.fill(0,0,0);
+      TFTscreen.rect(14, 86, 32, 15);
+
+      TFTscreen.setCursor(0, 90);
+
+      TFTscreen.print("x: ");
+      TFTscreen.print(x);
+      //temperatuurbool.clear();
+      xbool = false;
+    }
+
+    if(ybool == true)
+    {
+      //Clear section
+      TFTscreen.fill(0,0,0);
+      TFTscreen.rect(60, 86, 32, 15);
+
+      TFTscreen.setCursor(50, 90);
+
+      TFTscreen.print("y: ");
+      TFTscreen.print(y);
+      //temperatuurbool.clear();
+      ybool = false;
+    }
+
+    if(zbool == true)
+    {
+      //Clear section
+      TFTscreen.fill(0,0,0);
+      TFTscreen.rect(110, 86, 42, 15);
+
+      TFTscreen.setCursor(100, 90);
+
+      TFTscreen.print("z: ");
+      TFTscreen.print(z);
+      //temperatuurbool.clear();
+      zbool = false;
+    }
+    TFTscreen.stroke(255, 255, 255);
+}
+
 void logIButton(void) {
    byte i;
   byte present = 0;
   byte data[12];
   byte addr[8];
+  updateSensorValues();
+  TFTscreen.stroke(40, 255, 40);
 
   while (ds.search(addr)) {
     Serial.print("\n\n\n");
@@ -163,53 +241,6 @@ void logIButton(void) {
     TFTscreen.setCursor(0, 100);
     Serial.print("\n\n");
     timeStamp();
-    receiveEvent(10,temperatuurbool,humiditybool,xbool,ybool,zbool);
-    //print(temperatuurbool)
-    if(temperatuurbool == true)
-    {
-      TFTscreen.setCursor(0, 74);
-
-      TFTscreen.print("Temp: ");
-      TFTscreen.print(temp);
-      //temperatuurbool.clear();
-      temperatuurbool = false;
-    }
-
-    if(humiditybool == true)
-    {
-      TFTscreen.setCursor(80, 74);
-      TFTscreen.print("Hum: ");
-      TFTscreen.print(hum);
-      //temperatuurbool.clear();
-      humiditybool = false;
-    }
-
-    if(xbool == true)
-    {
-      TFTscreen.setCursor(0, 90);
-      TFTscreen.print("x: ");
-      TFTscreen.print(x);
-      //temperatuurbool.clear();
-      xbool = false;
-    }
-
-    if(ybool == true)
-    {
-      TFTscreen.setCursor(50, 90);
-      TFTscreen.print("y: ");
-      TFTscreen.print(y);
-      //temperatuurbool.clear();
-      ybool = false;
-    }
-
-    if(zbool == true)
-    {
-      TFTscreen.setCursor(100, 90);
-      TFTscreen.print("z: ");
-      TFTscreen.print(z);
-      //temperatuurbool.clear();
-      zbool = false;
-    }
 
     if (OneWire::crc8(addr, 7) != addr[7]) {
       TFTscreen.setCursor(0, 70);
@@ -268,19 +299,25 @@ void loop() {
   //TFTscreen.text(" Onewire \n Timestamp", 0, 6);
 
   int proximity = digitalRead(MOTION_PIN);
-
+  TFTscreen.line(0, 100, 200, 100);
+  TFTscreen.noStroke();
     if (proximity == LOW) // If the sensor's output goes low, motion is detected
   {
+    TFTscreen.stroke(20, 150, 255);
+    TFTscreen.line(0, 100, 200, 100);
     Serial.println("Motion detected!");
     TFTscreen.setCursor(0, 110);
     TFTscreen.print("Motion detected!");
   }
   else
   {
+    TFTscreen.line(0, 100, 200, 100);
     TFTscreen.fill(0,0,0);
     TFTscreen.rect(-1, 100, 240, 50);
     //TFTscreen.rect(0, 110, 240, 10, TFTscreen.Color565(0, 0, 0)); // Clear the area where the sentence was printed
   }
+  TFTscreen.line(0, 100, 200, 100);
+  TFTscreen.stroke(255, 255, 255);
 
 
 }
