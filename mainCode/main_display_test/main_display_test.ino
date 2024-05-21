@@ -11,6 +11,7 @@
 OneWire  ds(5);  // Connect 1-wire sensor to pin 5
 TFT TFTscreen = TFT(cs, dc, rst); // create an instance of the library
 const int MOTION_PIN = 7; // Pin connected to motion detector
+const byte LED = 6;
 
 RTC_DS1307 rtc;
 
@@ -41,7 +42,7 @@ void timeStamp(void){
   TFTscreen.text(String(now.minute(), DEC).c_str(), 35, 30);
   TFTscreen.text(":", 57, 30);
   TFTscreen.text(String(now.second(), DEC).c_str(), 67, 30);
-
+  
   delay(1000); // delay 1 second
 }
 
@@ -212,6 +213,7 @@ void logIButton(void) {
   byte addr[8];
   updateSensorValues();
   TFTscreen.stroke(40, 255, 40);
+  digitalWrite(LED, 0);
 
   while (ds.search(addr)) {
     Serial.print("\n\n\n");
@@ -240,6 +242,7 @@ void logIButton(void) {
     }
     TFTscreen.setCursor(0, 100);
     Serial.print("\n\n");
+    digitalWrite(LED, 1);
     timeStamp();
 
     if (OneWire::crc8(addr, 7) != addr[7]) {
@@ -258,6 +261,7 @@ void logIButton(void) {
 void setup() {
   Serial.begin(9600);
 
+  pinMode(LED, OUTPUT);
   pinMode(MOTION_PIN, INPUT_PULLUP);
 
   //TimeStamp
